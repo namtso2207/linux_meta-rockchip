@@ -7,7 +7,7 @@ LINUXLIBCVERSION ?= "5.10-custom%"
 
 require conf/machine/include/rockchip-arm64-common.inc
 
-KBUILD_DEFCONFIG = "namtso_a10_rk3588_defconfig"
+KBUILD_DEFCONFIG = "namtso-a10-3588_defconfig"
 
 MALI_GPU := "valhall-g610"
 MALI_VERSION ?= "g6p0"
