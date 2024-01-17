@@ -12,7 +12,7 @@ SRC_URI = "\
 		file://S39audio_set_up.sh \
 		file://S39reboot_mode_set_up.sh \
 		file://reboot-test-handle.sh \
-		file://env.txt \
+		file://uEnv.txt \
 		file://test_overlay_dt.dtbo \
 		"
 
@@ -28,7 +28,7 @@ do_install() {
 	install -m 0755 ${S}/reboot-test-handle.sh ${D}${bindir}
 
 	install -d ${D}${bootdir}
-	install -m 0755 ${S}/env.txt ${D}${bootdir}
+	install -m 0755 ${S}/uEnv.txt ${D}${bootdir}
 	mkdir -p ${D}${bootdir}/overlays
 	install -m 0755 ${S}/test_overlay_dt.dtbo ${D}${bootdir}/overlays/
 }
