@@ -1,7 +1,14 @@
-# Device Tree Overlays
-# i2c2          -- Enable I2C2 (GPIO header PIN25 && PIN26)
-# spi3          -- Enable SPI3 (GPIO header PIN15 && PIN16 && PIN22 && PIN23)
-# i2s0          -- Enable I2s0 (GPIO header PIN29 && PIN31 && PIN32 && PIN33 && PIN35 && PIN36 && PIN37 && PIN38)
-# onewire       -- Enable onewire bus (GPIO header PIN30)
-# mpu6050-i2c   -- Enable mpu6050 (GPIO Header PIN25 & PIN26 & PIN22),spi3 need to be removed
-# overlays=test_overlay_dt
+#############################DO NOT TOUCH THIS OPTION#############################
+rootdev=root=PLACEHOLDER
+partitiontype=partition_type=PLACEHOLDER
+#############################DO NOT TOUCH THIS OPTION#############################
+## Setup FAN mode
+fan_mode=auto
+
+## Add user args here, spilt with space.
+## e.g. Add bootargs 'test1=111 test2=222'
+## boot_user_args=test1=111 test2=222
+boot_user_args=
+
+## set wifi
+wifi=off
