@@ -16,6 +16,7 @@ SRC_URI = "\
 		file://rk3588-namtso-a10-3588.dtb.overlay.env \
 		file://pwm-gpio-overlay.dtbo \
 		file://spi-gpio-overlay.dtbo \
+		file://accel_gyro_data \
 		"
 
 do_install() {
@@ -28,6 +29,7 @@ do_install() {
 	install -d ${D}${bindir}
 	install -m 0755 ${S}/fan.sh ${D}${bindir}
 	install -m 0755 ${S}/reboot-test-handle.sh ${D}${bindir}
+	install -m 0755 ${S}/accel_gyro_data ${D}${bindir}
 
 	install -d ${D}${bootdir}
 	install -m 0755 ${S}/uEnv.txt ${D}${bootdir}
