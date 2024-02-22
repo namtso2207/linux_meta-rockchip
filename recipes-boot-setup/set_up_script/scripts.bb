@@ -13,7 +13,9 @@ SRC_URI = "\
 		file://S39reboot_mode_set_up.sh \
 		file://reboot-test-handle.sh \
 		file://uEnv.txt \
-		file://test_overlay_dt.dtbo \
+		file://rk3588-namtso-a10-3588.dtb.overlay.env \
+		file://pwm-gpio-overlay.dtbo \
+		file://spi-gpio-overlay.dtbo \
 		"
 
 do_install() {
@@ -29,8 +31,12 @@ do_install() {
 
 	install -d ${D}${bootdir}
 	install -m 0755 ${S}/uEnv.txt ${D}${bootdir}
-	mkdir -p ${D}${bootdir}/overlays
-	install -m 0755 ${S}/test_overlay_dt.dtbo ${D}${bootdir}/overlays/
+
+	mkdir -p ${D}${bootdir}/dtb/rockchip/rk3588-namtso-a10-3588.dtb.overlays
+	install -m 0755 ${S}/pwm-gpio-overlay.dtbo ${D}${bootdir}/dtb/rockchip/rk3588-namtso-a10-3588.dtb.overlays/
+	install -m 0755 ${S}/spi-gpio-overlay.dtbo ${D}${bootdir}/dtb/rockchip/rk3588-namtso-a10-3588.dtb.overlays/
+	install -m 0755 ${S}/rk3588-namtso-a10-3588.dtb.overlay.env ${D}${bootdir}/dtb/rockchip/
+
 }
 
 
