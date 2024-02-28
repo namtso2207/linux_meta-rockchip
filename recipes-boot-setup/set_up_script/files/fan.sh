@@ -18,15 +18,17 @@ fi
 AUTO_MODE=1
 MANUAL_MODE=0
 
-LEVEL_LOW=1
+LEVEL_LOWEST=1
+LEVEL_LOW=2
 LEVEL_MID=3
-LEVEL_HIGH=5
+LEVEL_HIGH=4
+LEVEL_HIGHEST=5
 
 usage() {
 	echo ""
 	if [ "${LINUX_VER}" == "5.10" ]; then
-		echo "Usage: $0 [on|auto|off]  :: Set fan mode"
-		echo "       $0 [low|mid|high] :: Set fan level"
+		echo "Usage: $0 [on|auto|manual|off]  :: Set fan mode"
+		echo "       $0 [lowest|low|mid|high|highest] :: Set fan level"
 		echo "       $0 [temp]         :: Query cpu temperature"
 		echo "       $0 [trig]         :: Query fan trigger temperature"
 		echo "       $0 [mode]         :: Query fan mode/level"
@@ -65,9 +67,12 @@ if [ "$FAN_INPUT" = "temp" ]; then
 	FAN_TEMP=$(cat $FAN_TEMP_NODE | grep cpu_${FAN_INPUT} | cut -d':' -f2)
 elif [ "$FAN_INPUT" = "trig" ]; then
 	mode=$FAN_INPUT
-	FAN_LVL_0=$(sudo cat /sys/class/fan/temp|grep level | awk '{print $4}' | cut -d':' -f2)
-	FAN_LVL_1=$(sudo cat /sys/class/fan/temp|grep level | awk '{print $5}' | cut -d':' -f2)
-	FAN_LVL_2=$(sudo cat /sys/class/fan/temp|grep level | awk '{print $6}' | cut -d':' -f2)
+	FAN_LVL_0=$(cat /sys/class/fan/temp|grep level | awk '{print $4}' | cut -d':' -f2)
+	FAN_LVL_1=$(cat /sys/class/fan/temp|grep level | awk '{print $5}' | cut -d':' -f2)
+	FAN_LVL_2=$(cat /sys/class/fan/temp|grep level | awk '{print $6}' | cut -d':' -f2)
+	FAN_LVL_3=$(cat /sys/class/fan/temp|grep level | awk '{print $7}' | cut -d':' -f2)
+	FAN_LVL_4=$(cat /sys/class/fan/temp|grep level | awk '{print $8}' | cut -d':' -f2)
+	FAN_LVL_5=$(cat /sys/class/fan/temp|grep level | awk '{print $9}' | cut -d':' -f2)
 elif [ "$FAN_INPUT" = "mode" ]; then
 	mode=$FAN_INPUT
 
@@ -85,9 +90,11 @@ elif [ "$FAN_INPUT" = "mode" ]; then
 
 		case $FAN_LEVEL in
 			0) FAN_LEVEL=off ;;
-			1) FAN_LEVEL=low ;;
-			2) FAN_LEVEL=mid ;;
-			3) FAN_LEVEL=high ;;
+			1) FAN_LEVEL=lowest ;;
+			2) FAN_LEVEL=low ;;
+			3) FAN_LEVEL=mid ;;
+			4) FAN_LEVEL=high ;;
+			5) FAN_LEVEL=highest ;;
 		esac
 	else
 		TEMP_VER=$(cat $FAN_CONTROL_NODE)
@@ -114,6 +121,11 @@ case $mode in
 		echo 0 > $FAN_ENABLE_NODE
 		message "CAUTION:" "Disabling fan can reduce the lifetime of this board!" 0
 		;;
+	lowest)
+		echo 1 > $FAN_ENABLE_NODE
+		echo $MANUAL_MODE > $FAN_MODE_NODE
+		echo $LEVEL_LOWEST > $FAN_LEVEL_NODE
+		;;
 	low)
 		echo 1 > $FAN_ENABLE_NODE
 		echo $MANUAL_MODE > $FAN_MODE_NODE
@@ -129,6 +141,11 @@ case $mode in
 		echo $MANUAL_MODE > $FAN_MODE_NODE
 		echo $LEVEL_HIGH > $FAN_LEVEL_NODE
 		;;
+	highest)
+		echo 1 > $FAN_ENABLE_NODE
+		echo $MANUAL_MODE > $FAN_MODE_NODE
+		echo $LEVEL_HIGHEST > $FAN_LEVEL_NODE
+		;;
 	on)
 		echo $AUTO_MODE > $FAN_MODE_NODE
 		echo 1 > $FAN_ENABLE_NODE
@@ -142,7 +159,12 @@ case $mode in
 		fi
 		;;
 	manual)
-		echo 20000 > $FAN_CONTROL_NODE
+		if [ "${LINUX_VER}" == "5.10" ]; then
+			echo $MANUAL_MODE > $FAN_MODE_NODE
+			echo 1 > $FAN_ENABLE_NODE
+		else
+			echo 20000 > $FAN_CONTROL_NODE
+		fi
 		;;
 	mode-off)
 		echo "Fan state: $FAN_STATE"
@@ -160,9 +182,11 @@ case $mode in
 		echo "Fan temp: $FAN_TEMP"
 		;;
 	trig)
-		echo "Fan trigger low temp: $FAN_LVL_0"
-		echo "Fan trigger mid temp: $FAN_LVL_1"
-		echo "Fan trigger high temp: $FAN_LVL_2"
+		echo "Fan trigger lowest temp: $FAN_LVL_0"
+		echo "Fan trigger lowe temp: $FAN_LVL_1"
+		echo "Fan trigger mid temp: $FAN_LVL_2"
+		echo "Fan trigger high temp: $FAN_LVL_3"
+		echo "Fan trigger highest temp: $FAN_LVL_4"
 		;;
 	--help|-h)
 		message "Help:" "Command line parameters:" 0
