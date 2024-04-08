@@ -11,6 +11,7 @@ SRC_URI = "\
 		file://fan.sh  \
 		file://S39audio_set_up.sh \
 		file://S39reboot_mode_set_up.sh \
+		file://S99nlink_net.sh \
 		file://reboot-test-handle.sh \
 		file://uEnv.txt \
 		file://rk3588-namtso-a10-3588.dtb.overlay.env \
@@ -25,6 +26,7 @@ do_install() {
 	install -m 0755 ${S}/S39bt_set_up.sh ${D}${sysconfdir}/rcS.d/
 	install -m 0755 ${S}/S39audio_set_up.sh ${D}${sysconfdir}/rcS.d/
 	install -m 0755 ${S}/S39reboot_mode_set_up.sh ${D}${sysconfdir}/rcS.d/
+	install -m 0755 ${S}/S99nlink_net.sh ${D}${sysconfdir}/rcS.d/
 
 	install -d ${D}${bindir}
 	install -m 0755 ${S}/fan.sh ${D}${bindir}
